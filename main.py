@@ -40,5 +40,17 @@ def all_station_info(station):
     return info
 
 
+@app.route("/api/v1/yearly/<station>/<year>")
+def year_info(station, year):
+    df = pd.read_csv(
+        "data/data_stations/TG_STAID" + str(station).zfill(6) + ".txt",
+        skiprows=20,
+    )
+    df["    DATE"] = df["    DATE"].astype(str)
+    info = df[df["    DATE"].str.startswith(str(year))].to_dict(orient="records")
+    print(info)
+    return info
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
